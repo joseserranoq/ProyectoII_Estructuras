@@ -233,6 +233,11 @@ int main()
 
 
   //Busca la persona por el nombre.
+
+	buscaPersona("Jose");
+  //El metodo leerPersona, imprime toda la imformacion de la persona.
+	leerPersona(4);
+
 	buscaPersona("Jose Quesada");
   //El metodo leerPersona, imprime toda la imformacion de la persona.
 	cout<<"\n\n-----Persona que se quiere modificar-----"<<endl;
