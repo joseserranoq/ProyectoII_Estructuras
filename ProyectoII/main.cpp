@@ -47,8 +47,8 @@ void leer()
 	while (!archivo.eof()) {//end of file
 		cout << "\nNombre: " << p.nombre << " Edad: " << p.edad << " Genero: " << p.genero << " Estado Civil: " << p.estadoCivil
 			<< " Oficio: " << p.oficio << " Sueldo: " << p.sueldo << " Años de trabajo: " << p.anosTrabajo << " Cantidad de hijos: " << p.cantHijos
-			<< " Hobby: " << p.hobby << " Tipo de alimentación: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
-			<< " Tipo de música: " << p.tipoMusica << " Provincia: " << p.provincia <<" Cantón: " << p.canton <<" Distrito: " << p.distrito << endl;
+			<< " Hobby: " << p.hobby << " Tipo de alimentacion: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
+			<< " Tipo de musica: " << p.tipoMusica << " Provincia: " << p.provincia <<" Canton: " << p.canton <<" Distrito: " << p.distrito << endl;
 
 		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
 	}
@@ -98,15 +98,32 @@ void leerPersona(int posicion)
 		if (posicion == i) {
 			cout << "\nNombre: " << p.nombre << " Edad: " << p.edad << " Genero: " << p.genero << " Estado Civil: " << p.estadoCivil
 				<< " Oficio: " << p.oficio << " Sueldo: " << p.sueldo << " Años de trabajo: " << p.anosTrabajo << " Cantidad de hijos: " << p.cantHijos
-				<< " Hobby: " << p.hobby << " Tipo de alimentación: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
-				<< " Tipo de música: " << p.tipoMusica << " Provincia: " << p.provincia << " Cantón: " << p.canton << " Distrito: " << p.distrito << endl;
+				<< " Hobby: " << p.hobby << " Tipo de alimentacion: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
+				<< " Tipo de musica: " << p.tipoMusica << " Provincia: " << p.provincia << " Canton: " << p.canton << " Distrito: " << p.distrito << endl;
 		}
 		i++;
 		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
 	}
-	cout << "No se encontró la persona";
-	archivo.close();
+    cout << "No se encontro la persona";     //SE IMPRIME AUNQUE LA PERSONA YA ESTE AGREGADA ¿DEJAR MSJ O NO?
+    archivo.close();
 }
+
+//Se modifica la persona, segun el id ingresa de la persona a modificar
+void modificarPersona(Persona modificar, int posicion){
+	fstream archivo ("lista.txt",ios::in |ios::out | ios::binary);
+
+	if (archivo.fail()){
+        cout<<"\nEl archivo no se puede abrir";
+        exit(1);
+	}
+
+    archivo.seekp(posicion*sizeof(modificar),ios::beg);
+    archivo.write(reinterpret_cast<char *>(&modificar), sizeof(modificar));
+
+	archivo.close(); //se cierra el archivo
+}
+
+
 int main()
 {
 	fstream archivo("lista.txt", ios::in | ios::out | ios::binary | ios::trunc);
@@ -216,9 +233,21 @@ int main()
 
 
   //Busca la persona por el nombre.
+
 	buscaPersona("Jose");
   //El metodo leerPersona, imprime toda la imformacion de la persona.
 	leerPersona(4);
+
+	buscaPersona("Jose Quesada");
+  //El metodo leerPersona, imprime toda la imformacion de la persona.
+	cout<<"\n\n-----Persona que se quiere modificar-----"<<endl;
+	leerPersona(6);
+    Persona modificar ={"Juliana Ramirez", 32, "Mujer", "Casada", "Profesora", 450000, 15, 1, "Jugar Futbol", "Omnivoro", "Dulce", "Valadas","Ciudad Quesasa","San Carlos","Pocosol"};
+    modificarPersona(modificar,6);
+    cout<<"\n\n-----Persona ya modificada-----"<<endl;
+    leerPersona(6);
+
+
 	//cout << "El tamaño de la estructura:  " << sizeof(Persona);
 	return 0;
 }
