@@ -211,6 +211,8 @@ Nodo* creaNodoGenero() { //falta el nexo a padre
 	}
 }
 
+
+
 void arbolDecision() {
 	/*
 		Se genera la raiz
@@ -253,6 +255,7 @@ void arbolDecision() {
 
 
 }
+
 
 
 void datosQuemados(){
@@ -365,6 +368,7 @@ void datosQuemados(){
     //Busca la persona por el nombre.
 
 	buscaPersona("Jose");
+	buscaPersona("katherine");
     //El metodo leerPersona, imprime toda la imformacion de la persona.
 	leerPersona(4);
 
