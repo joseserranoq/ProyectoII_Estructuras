@@ -39,7 +39,7 @@ struct Persona {
 	int edad;
 	char genero[7];
 	char estadoCivil[15];
-	char oficio[30];
+	char oficio[30];S
 	int sueldo;
 	int anosTrabajo;
 	int cantHijos;
@@ -341,6 +341,187 @@ Nodo *  arbolDecision(Nodo * r) {
 	arbolDecision(raiz);
 
 }
+// Metodo para contar nodos hojas del arbol de decision.
+int hoja = 0;
+void contarHojas(Nodo * raiz){
+    if(raiz == NULL){
+        return;
+    }
+    //Si es null es porque es hija, lo cual se aumenta en la variable 'hoja'.
+    if(raiz->sublista==NULL){
+        hoja++;
+        return;
+    }
+    Nodo * tempSubLista = raiz->sublista;
+
+    while(tempSubLista != NULL){
+        contarHojas(tempSubLista);}
+
+        tempSubLista = tempSubLista->sig; // Pasa al siguiente hijo
+    }
+}
+
+//Metodo para agregar una persosna al archivo
+void agregarPersona(){
+    Persona personaNueva;
+
+    string datoString;
+
+    cout<<"Nombre: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.nombre, datoString.c_str(),sizeof(personaNueva.nombre));
+
+    cout<<"Edad: "<<endl;
+    cin >> personaNueva.edad;
+    cin.ignore();
+
+    cout<<"Genero: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.genero, datoString.c_str(),sizeof(personaNueva.genero));
+
+    cout<<"Estado civil: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.estadoCivil, datoString.c_str(),sizeof(personaNueva.estadoCivil));
+
+    cout<<"Oficio: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.oficio, datoString.c_str(),sizeof(personaNueva.oficio));
+
+    cout<<"Sueldo: "<<endl;
+    cin >> personaNueva.sueldo;
+    cin.ignore();
+
+    cout<<"Años de trabajo: "<<endl;
+    cin >> personaNueva.anosTrabajo;
+    cin.ignore();
+
+    cout<<"Cantidad de hijos: "<<endl;
+    cin >> personaNueva.cantHijos;
+    cin.ignore();
+
+    cout<<"Hobby: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.hobby, datoString.c_str(),sizeof(personaNueva.hobby));
+
+    cout<<"Tipo de alimentacion: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.tipoAlimentacion, datoString.c_str(),sizeof(personaNueva.tipoAlimentacion));
+
+    cout<<"Tipo de comida: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.tipoComida, datoString.c_str(),sizeof(personaNueva.tipoComida));
+
+    cout<<"Tipo de musica: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.tipoMusica, datoString.c_str(),sizeof(personaNueva.tipoMusica));
+
+    cout<<"Provincia: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.provincia, datoString.c_str(),sizeof(personaNueva.provincia));
+
+    cout<<"Canton: "<<endl;}
+    getline(cin, datoString);
+    strncpy(personaNueva.canton, datoString.c_str(),sizeof(personaNueva.canton));
+
+    cout<<"Distrito: "<<endl;
+    getline(cin, datoString);
+    strncpy(personaNueva.distrito, datoString.c_str(),sizeof(personaNueva.distrito));
+
+    cout<<"Cantidad de mascotas: "<<endl;
+    cin >> personaNueva.numMascotas;
+    cin.ignore();
+}
+
+
+/*
+
+        REPORTES
+
+*/
+
+
+
+/*
+
+    Funciones que van el menu.
+
+*/
+
+
+void personasMenu(){
+    int opcion;
+    cout << "1. Agregar persona" << endl;
+    cout << "2. Modificar a una persona" << endl;
+    cout << "3. Borrar a una persona" << endl;
+    cout << "4. Leer a una persona" << endl;
+
+    cout <<"Ingrese una opcion: "<<endl;
+    cin >> opcion;
+
+    if (opcion == 1){
+        agregarPersona();
+    }
+    if (opcion == 2){
+
+
+    }
+    if (opcion == 3){
+
+    }
+    if (opcion == 4){
+
+        leerPersona()
+    }
+}
+
+
+
+
+/*
+
+    Menu
+
+*/
+
+void menu(){
+    int opcionPrincipal;
+    bool repetir = true;
+
+    do{
+        cout <<"1. Creacion del arbol binario" << endl;
+        cout <<"2. Opciones del arbol binario" <<endl,
+
+        cout <<"Ingrese una opcion: "<<endl;
+        cin >> opcionPrincipal;
+
+        if(opcionPrincipal == 1){
+            //Metodo de la creacion del arbol binario creado a la manera del usuario.
+
+        }
+        if(opcionPrincipal == 2){
+            int opcionSegundaria;
+            cout << "1. Personas" << endl;
+            cout << "2. Consultas" << endl;
+            cout << "3. Reportes" << endl;
+
+            cout <<"Ingrese una opcion: "<<endl;
+            cin >> opcionSegundaria;
+            if(opcionSegundaria == 1){
+
+            }
+            if(opcionSegundaria == 2){
+
+            }
+            if(opcionSegundaria == 3){
+
+            }
+        }
+
+    }while(repetir);
+
+}
+
+
 
 void datosQuemados() {
 	fstream archivo("lista.txt", ios::in | ios::out | ios::binary | ios::trunc);
