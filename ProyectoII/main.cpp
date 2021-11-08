@@ -141,7 +141,7 @@ void leerPersona(int posicion)
     archivo.close();
 }
 
-//Se modifica la persona, segun el id ingresa de la persona a modificar
+//Se modifica la persona, segun el la posicion ingresada de la persona a modificar
 void modificarPersona(Persona modificar, int posicion){
 	fstream archivo ("lista.txt",ios::in |ios::out | ios::binary);
 
