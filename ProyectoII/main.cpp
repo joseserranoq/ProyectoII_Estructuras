@@ -2,7 +2,7 @@
 #include <fstream>
 using namespace std;
 struct Nodo {
-	Nodo*sig;
+	Nodo* sig;
 	Nodo* nHijo;
 	Nodo* nPadre;
 	int cant; //cantidad
@@ -633,9 +633,33 @@ void agregarPersona(){
 
 /*
 
-        REPORTES
+        CONSULTAS
 
 */
+
+void numeroPersonaNivel() {
+    //Contadores
+    int conNivel = 0;
+    //Punteros
+    Nodo* tempV = raiz;
+    //Para recorrer hacia abajo.
+	while (tempV!= NULL) {
+	    int conPersona = 0;
+	    Nodo * tempH = tempV;
+
+        while(tempH != NULL){
+            conPersona += tempH->cant;
+            cout <<"Nivel"<<conNivel<<": "<<canPersona<<endl;
+            tempH = tempH->sig;
+        }
+        tempV = tempV->sig;
+        conNivel++;
+	}
+	//si no se encuentra el nivel
+	return temp;
+}
+
+
 
 
 
