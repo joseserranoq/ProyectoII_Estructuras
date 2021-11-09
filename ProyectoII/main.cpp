@@ -328,7 +328,7 @@ string determinaValorAnosT(int valor) { //años trabajados
 
 string determinaValorCantM(int valor) { //cantidad de mascotas
 	if (valor <= 2)
-		return "<=2";
+		return "<2";
 	else if (valor <= 10)
 		return "2 <= 10";
 	else
@@ -414,7 +414,66 @@ bool validaInt(string var) {	//Funciona decodifica el string para saber si son n
 	}
 	return true;	//si todos los chars son numeros positivos, no se permiten signos
 }
+string tipoOpcion(int opcion) {
+	string nivel;
+	if (opcion == 1)
+		return "Edad";
+	else if (opcion == 2)
+		 return "Genero";
+	else if (opcion == 3)
+		 return"Estado Civil";
+	else if (opcion == 4)
+		 return"Oficio";
+	else if (opcion == 5)
+		 return"Sueldo";
+	else if (opcion == 6)
+		 return"Años de Trabajo";
+	else if (opcion == 7)
+		return "Cantidad de Hijos";
+	else if (opcion == 8)
+		return "Hobby";
+	else if (opcion == 9)
+		return"Tipo de Alimentacion";
+	else if (opcion == 10)
+		return"Tipo Comida";
+	else if (opcion == 11)
+		return"Tipo Musica";
+	else if (opcion == 12)
+		return"Provincia";
+	else if (opcion == 13)
+		 return"Canton";
+	else if (opcion == 14)
+		return "Distrito";
+	else if (opcion == 15)
+		return"Cantidad Mascotas";
+}
+bool verificaNiveles(Nodo* raiz,int opcion) {
+	Nodo* temp = raiz;
+	int cont=0;
+	string tipo = tipoOpcion(opcion);
+	while(temp != NULL) {
+		if (temp->nivel == tipo)	//si la opcion que se eligió ya fue usada en el arbol de decision no se inserta de nuevo o se excede los 15 niveles
+			return false;
+		temp = temp->nHijo;
+		cont++;
+	}
+	return true;	//si la opcion no existe en el arbol de decision se puede insertar
+}
+bool verificaMinimo(Nodo*raiz) {
 
+	int cont = 0;
+	Nodo* temp = raiz;
+	while (temp != NULL) {
+		temp = temp->nHijo;
+		cont++;
+	}
+	if (cont < 3) {
+		//system("CLS");
+		cout << "*********************Ingrese otro nivel minimo 3" << ", hay: " << cont<<"**********************\n" << endl;
+		return false;
+	}
+	return true;
+}
 Nodo* arbolDecision(Nodo* r) {
 	/*
 		Se genera la raiz
@@ -446,91 +505,99 @@ Nodo* arbolDecision(Nodo* r) {
 				temp = temp->sig;
 
 	*/
+
 	cout << "Se selecciona la opcion que desea \n1-edad  2-genero  3-estadoCivil  4-Oficio  5-Sueldo  6-Años de Trabajo  7-Cantidad de Hijos  8-Hobby  9-Tipo de Alimentacion\n  "
 		<< "10-Tipo de Comida  11-Tipo de Musica  12-Provincia  13-Canton  14-Distrito  15-Cantidad de Mascotas \nIntroduzca una opcion : ";
 	string num;
 	cin >> num;
+	//valida si el string contiene numero enteros positivos sin caracteres
 	if (validaInt(num)) {
 		//convierte el string en un int
-		int opcion = stoi(num, NULL, 16);	//int stoi (const string&  str, size_t* idx = 0, int base = 10);
+		int opcion = stoi(num, NULL, 10);	//int stoi (const string&  str, size_t* idx = 0, int base = 10);
 
-		ifstream archivo("lista.txt", ios::in | ios::binary);
-		struct Persona p;
-		if (archivo.fail()) {
-			cout << "No se pudo abrir el archivo";
-			exit(1);
-		}
-		int posicion = 0;	//tiene la funcion de saber la posicion de los elementos en el archivo
-		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
-		while (!archivo.eof()) {//end of file
-			//falta funcion que determine que no se repitan
-			//contador para un maximo y minimo de niveles
-
-			if (opcion == 1) {
-				r = creaNodoInt(p.edad, posicion, r, "Edad");
-				cout << "Dato Edad insertado con exito" << endl;
+		//verifica si está repetida la opcion en el arbol, si tambien ha llegado a su maximo
+		if (verificaNiveles(r, opcion)) {
+			//abre el archivo
+			ifstream archivo("lista.txt", ios::in | ios::binary);
+			struct Persona p;
+			if (archivo.fail()) {
+				cout << "No se pudo abrir el archivo";
+				exit(1);
 			}
-			else if (opcion == 2) {
-				r = creaNodoString(p.genero, posicion, r, "Genero");
-				cout << "Dato Genero insertado con exito" << endl;
-			}
-			else if (opcion == 3) {
-				r = creaNodoString(p.estadoCivil, posicion, r, "Estado Civil");
-				cout << "Dato Estado Civil insertado con exito" << endl;
-			}
-			else if (opcion == 4) {
-				r = creaNodoString(p.oficio, posicion, r, "Oficio");
-				cout << "Dato Oficio insertado con exito" << endl;
-			}
-			else if (opcion == 5) {
-				r = creaNodoInt(p.sueldo, posicion, r, "Sueldo");
-				cout << "Dato Sueldo insertado con exito" << endl;
-			}
-			else if (opcion == 6) {
-				r = creaNodoInt(p.anosTrabajo, posicion, r, "Años de Trabajo");
-				cout << "Nivel Años de Trabajo insertado con exito" << endl;
-			}
-			else if (opcion == 7) {
-				r = creaNodoInt(p.cantHijos, posicion, r, "Cantidad de Hijos");
-				cout << "Nivel Cantidad de Hijos insertado con exito" << endl;
-			}
-			else if (opcion == 8) {
-				r = creaNodoString(p.hobby, posicion, r, "Hobby");
-				cout << "Nivel Hobby insertado con exito" << endl;
-			}
-			else if (opcion == 9) {
-				r = creaNodoString(p.tipoAlimentacion, posicion, r, "Tipo de Alimentacion");
-				cout << "Nivel Tipo de Alimentacion insertado con exito" << endl;
-			}
-			else if (opcion == 10) {
-				r = creaNodoString(p.tipoComida, posicion, r, "Tipo Comida");
-				cout << "Nivel Tipo Comida insertado con exito" << endl;
-			}
-			else if (opcion == 11) {
-				r = creaNodoString(p.tipoMusica, posicion, r, "Tipo Musica");
-				cout << "Nivel Tipo Musica insertado con exito" << endl;
-			}
-			else if (opcion == 12) {
-				r = creaNodoString(p.provincia, posicion, r, "Provincia");
-				cout << "Nivel Provincia insertado con exito" << endl;
-			}
-			else if (opcion == 13) {
-				r = creaNodoString(p.canton, posicion, r, "Canton");
-				cout << "Nivel Canton insertado con exito" << endl;
-			}
-			else if (opcion == 14) {
-				r = creaNodoString(p.distrito, posicion, r, "Distrito");
-				cout << "Nivel Distrito insertado con exito" << endl;
-			}
-			else if (opcion == 15) {
-				r = creaNodoInt(p.numMascotas, posicion, r, "Cantidad Mascotas");
-				cout << "Nivel Cantidad Mascotas insertado con exito" << endl;
-			}
+			int posicion = 0;	//tiene la funcion de saber la posicion de los elementos en el archivo
 			archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
-			posicion += 1;
+			while (!archivo.eof()) {//end of file
+				//falta funcion que determine que no se repitan
+				//contador para un maximo y minimo de niveles
 
+				if (opcion == 1) {
+					r = creaNodoInt(p.edad, posicion, r, "Edad");
+					cout << "Dato Edad insertado con exito" << endl;
+				}
+				else if (opcion == 2) {
+					r = creaNodoString(p.genero, posicion, r, "Genero");
+					cout << "Dato Genero insertado con exito" << endl;
+				}
+				else if (opcion == 3) {
+					r = creaNodoString(p.estadoCivil, posicion, r, "Estado Civil");
+					cout << "Dato Estado Civil insertado con exito" << endl;
+				}
+				else if (opcion == 4) {
+					r = creaNodoString(p.oficio, posicion, r, "Oficio");
+					cout << "Dato Oficio insertado con exito" << endl;
+				}
+				else if (opcion == 5) {
+					r = creaNodoInt(p.sueldo, posicion, r, "Sueldo");
+					cout << "Dato Sueldo insertado con exito" << endl;
+				}
+				else if (opcion == 6) {
+					r = creaNodoInt(p.anosTrabajo, posicion, r, "Años de Trabajo");
+					cout << "Nivel Años de Trabajo insertado con exito" << endl;
+				}
+				else if (opcion == 7) {
+					r = creaNodoInt(p.cantHijos, posicion, r, "Cantidad de Hijos");
+					cout << "Nivel Cantidad de Hijos insertado con exito" << endl;
+				}
+				else if (opcion == 8) {
+					r = creaNodoString(p.hobby, posicion, r, "Hobby");
+					cout << "Nivel Hobby insertado con exito" << endl;
+				}
+				else if (opcion == 9) {
+					r = creaNodoString(p.tipoAlimentacion, posicion, r, "Tipo de Alimentacion");
+					cout << "Nivel Tipo de Alimentacion insertado con exito" << endl;
+				}
+				else if (opcion == 10) {
+					r = creaNodoString(p.tipoComida, posicion, r, "Tipo Comida");
+					cout << "Nivel Tipo Comida insertado con exito" << endl;
+				}
+				else if (opcion == 11) {
+					r = creaNodoString(p.tipoMusica, posicion, r, "Tipo Musica");
+					cout << "Nivel Tipo Musica insertado con exito" << endl;
+				}
+				else if (opcion == 12) {
+					r = creaNodoString(p.provincia, posicion, r, "Provincia");
+					cout << "Nivel Provincia insertado con exito" << endl;
+				}
+				else if (opcion == 13) {
+					r = creaNodoString(p.canton, posicion, r, "Canton");
+					cout << "Nivel Canton insertado con exito" << endl;
+				}
+				else if (opcion == 14) {
+					r = creaNodoString(p.distrito, posicion, r, "Distrito");
+					cout << "Nivel Distrito insertado con exito" << endl;
+				}
+				else if (opcion == 15) {
+					r = creaNodoInt(p.numMascotas, posicion, r, "Cantidad de Mascotas");
+					cout << "Nivel Cantidad Mascotas insertado con exito" << endl;
+				}
+				archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+				posicion += 1;
+
+			}
+			archivo.close();
 		}
-		archivo.close();
+		else
+			cout << "Excede la cantidad maxima de niveles del arbol o la opcion ya se encontraba en el arbol";
 	}
 	else
 		cout << "Dato incorrecto" << endl;
@@ -538,15 +605,14 @@ Nodo* arbolDecision(Nodo* r) {
 	cout << endl << "Desea continuar?" << endl << "digite cualquier tecla para continuar o digite 0 para terminar" << endl;
 	int op;
 	cin >> op;
-	if (op != 0) {
-		system("CLS");
+
+	if (op != 0 || !verificaMinimo(r)) {
 		r = arbolDecision(r);
 	}
 	system("CLS");
 	cout << "Arbol generado con exito" << endl;
 	return r;
 }
-
 
 void datosQuemados() {
 	fstream archivo("lista.txt", ios::in | ios::out | ios::binary | ios::trunc);
