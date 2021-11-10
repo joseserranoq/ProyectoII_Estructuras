@@ -629,6 +629,10 @@ void agregarPersona(){
     cin.ignore();
 }
 
+void modPersona(){
+
+}
+
 
 /*
 
@@ -658,8 +662,24 @@ void numeroPersonaNivel() {
 	return temp;
 }
 
+/*
 
+    REPORTES
 
+*/
+
+//1.Imprimir la información completa del árbol en preorden.
+void imprimirInformacionPreorden(Nodo* raiz){
+
+    if(raiz == NULL)
+    {
+        return raiz;
+    }
+
+    cout<<raiz<<endl;  // Aqui falta algo mas?
+    imprimirInformacionPreorden(raiz->nPadre);
+    imprimirInformacionPreorden(raiz->nHijo);
+}
 
 
 /*
