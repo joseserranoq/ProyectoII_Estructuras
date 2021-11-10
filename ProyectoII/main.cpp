@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#include <string.h>
 using namespace std;
 struct Nodo {
 	Nodo* sig;
@@ -39,7 +41,7 @@ struct Persona {
 	int edad;
 	char genero[7];
 	char estadoCivil[15];
-	char oficio[30];S
+	char oficio[30];
 	int sueldo;
 	int anosTrabajo;
 	int cantHijos;
@@ -218,10 +220,9 @@ Nodo* recorreNodoH(Nodo * temp,string valor) {
 //agrega la poscion en las sublistas
 Lista* agregaPosicion(Nodo * temp, int posicion) {
 	//recorrer la sublista para colocar la posicion al final de la lista
-	Lista* tempL = temp->sublista;
-	Lista * nnL = new Lista(posicion);
+	Lista* lista = temp->sublista;
+	Lista* nnL = new Lista(posicion);
 	nnL->nexoNodo = temp;
-
 	if (lista == NULL) {
 		lista = nnL;
 	}
@@ -542,21 +543,19 @@ Nodo *  arbolDecision(Nodo * r) {
 // Metodo para contar nodos hojas del arbol de decision.
 int hoja = 0;
 void contarHojas(Nodo * raiz){
-    if(raiz == NULL){
-        return;
-    }
-    //Si es null es porque es hija, lo cual se aumenta en la variable 'hoja'.
-    if(raiz->sublista==NULL){
-        hoja++;
-        return;
-    }
-    Nodo * tempSubLista = raiz->sublista;
+    Nodo* tempV = raiz;
+    //Para recorrer hacia abajo.
+	while (tempV == NULL) {
 
-    while(tempSubLista != NULL){
-        contarHojas(tempSubLista);}
-
-        tempSubLista = tempSubLista->sig; // Pasa al siguiente hijo
-    }
+	    Nodo * tempH = tempV;
+        //Para recorrer hacia el lado
+        while(tempH != NULL){
+            hoja++;
+            tempH = tempH->sig;
+        }
+	}
+	//si no se encuentra el nivel
+	return temp;
 }
 
 //Metodo para agregar una persosna al archivo
@@ -567,7 +566,7 @@ void agregarPersona(){
 
     cout<<"Nombre: "<<endl;
     getline(cin, datoString);
-    strncpy(personaNueva.nombre, datoString.c_str(),sizeof(personaNueva.nombre));
+    stri(personaNueva.nombre, datoString.c_str(),sizeof(personaNueva.nombre));
 
     cout<<"Edad: "<<endl;
     cin >> personaNueva.edad;
@@ -860,7 +859,11 @@ int main()
 	raiz = generaRaiz();
 	raiz = arbolDecision(raiz);
 	cout << endl << raiz->cant << endl << raiz->nHijo->valor << endl << raiz->nHijo->sig->valor<<endl;
-	buscaPersona("Jose Quesada");
+
+
+	numeroPersonaNivel();
+
+	/*buscaPersona("Jose Quesada");
 	//El metodo leerPersona, imprime toda la imformacion de la persona.
 	leerPersona(4);
 
@@ -873,6 +876,6 @@ int main()
 	cout << "\n\n-----Persona ya modificada-----" << endl;
 	leerPersona(6);
 
-	//cout << "El tama�o de la estructura:  " << sizeof(Persona);
+	//cout << "El tama�o de la estructura:  " << sizeof(Persona);*/
 	return 0;
 }
