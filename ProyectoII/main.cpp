@@ -70,6 +70,30 @@ void escribir(Persona x)
 	archivo.close(); //se cierra el archivo
 }
 
+bool verificaPosicionArch(int posicion) {	//funciona para comprobar que exista un elemento en el archivo en la posicion que se marque
+	ifstream archivo("lista.txt", ios::in | ios::binary);
+	struct Persona p;
+	if (archivo.fail()) {
+		cout << "\nNo se pudo abrir el archivo" << endl;
+		exit(1);
+	}
+	//archivo.seekg(0);
+	int index = 0;
+	archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	while (!archivo.eof()) {//end of file
+		if (posicion == index)
+		{
+			archivo.close();
+			return true;
+		}
+
+		index++;
+		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	}
+	archivo.close();
+	return false;
+}
+
 //El metodo leer, imprime toda la informacion del txt.
 void leer()
 {
@@ -128,22 +152,17 @@ void leerPersona(int posicion)
 		cout << "No se pudo abrir el archivo";
 		exit(1);
 	}
-	int i = 0;
-	//archivo.seekg(0);
-	archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
-	while (!archivo.eof()) {//end of file
-		if (posicion == i) {
-			cout << "\nNombre: " << p.nombre << " Edad: " << p.edad << " Genero: " << p.genero << " Estado Civil: " << p.estadoCivil
-				<< " Oficio: " << p.oficio << " Sueldo: " << p.sueldo << " Años de trabajo: " << p.anosTrabajo << " Cantidad de hijos: " << p.cantHijos
-				<< " Hobby: " << p.hobby << " Tipo de alimentacion: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
-				<< " Tipo de musica: " << p.tipoMusica << " Provincia: " << p.provincia << " Canton: " << p.canton << " Distrito: " << p.distrito <<" Numero de mascotas: "<<p.numMascotas << endl;
-			return;
-		}
-		i++;
+	if (verificaPosicionArch(posicion)) {	//si la posicion existe en el archivo se imprimen los datos
+		archivo.seekg(posicion * sizeof(p), ios::beg);
 		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+		cout << "\nNombre: " << p.nombre << " Edad: " << p.edad << " Genero: " << p.genero << " Estado Civil: " << p.estadoCivil
+			<< " Oficio: " << p.oficio << " Sueldo: " << p.sueldo << " Años de trabajo: " << p.anosTrabajo << " Cantidad de hijos: " << p.cantHijos
+			<< " Hobby: " << p.hobby << " Tipo de alimentacion: " << p.tipoAlimentacion << " Tipo de comida: " << p.tipoComida
+			<< " Tipo de musica: " << p.tipoMusica << " Provincia: " << p.provincia << " Canton: " << p.canton << " Distrito: " << p.distrito << " Numero de mascotas: " << p.numMascotas << endl;
+		archivo.close();
 	}
-	cout << "No se encontro la persona";     //SE IMPRIME AUNQUE LA PERSONA YA ESTE AGREGADA ¿DEJAR MSJ O NO?
-	archivo.close();
+	else
+		cout << "Posicion inexistente en el archivo"<<endl;
 }
 
 int totalpersonas() { //cuenta el total de personas que hay en el archivo
@@ -166,9 +185,7 @@ int totalpersonas() { //cuenta el total de personas que hay en el archivo
 
 //Se modifica la persona, segun el id ingresa de la persona a modificar
 void modificarPersona(Persona modificar, int posicion) {
-	/*
-	* FALTA AGREGAR LA VERIFICACION DE SI EXISTE LA POSCION EN EL ARCHIVO
-	*/
+
 
 	fstream archivo("lista.txt", ios::in | ios::out | ios::binary);
 
@@ -176,9 +193,14 @@ void modificarPersona(Persona modificar, int posicion) {
 		cout << "\nEl archivo no se puede abrir";
 		exit(1);
 	}
-	archivo.seekp(posicion * sizeof(modificar), ios::beg);
-	archivo.write(reinterpret_cast<char*>(&modificar), sizeof(modificar));
-	archivo.close(); //se cierra el archivo
+	if (verificaPosicionArch(posicion)){
+		archivo.seekp(posicion * sizeof(modificar), ios::beg);
+		archivo.write(reinterpret_cast<char*>(&modificar), sizeof(modificar));
+		archivo.close(); //se cierra el archivo
+		cout << "La persona ha sido modificada en la posicion: " << posicion << " Con exito" << endl;
+	}
+	else
+		cout << "Posicion inexistente en el archivo" << endl;
 }
 
 //Se utiliza para contar el total de personas que estan almacenadas en el archivo y generar la raiz del arbol de decision
@@ -461,7 +483,7 @@ bool verificaNiveles(Nodo* raiz,int opcion) {
 }
 bool verificaMinimo(Nodo*raiz) {
 
-	int cont = 0;
+	int cont = -1;
 	Nodo* temp = raiz;
 	while (temp != NULL) {
 		temp = temp->nHijo;
@@ -725,14 +747,16 @@ void datosQuemados() {
 int main()
 {
 	datosQuemados();
-	raiz = generaRaiz();
-	raiz = arbolDecision(raiz);
+	//raiz = generaRaiz();
+	//raiz = arbolDecision(raiz);
 	//para revisar
-	Nodo* temp = raiz;
+	/*Nodo* temp = raiz;
 	while (temp != NULL) {
 		cout << temp->nivel << "\t" << temp->valor << endl;
 		temp = temp->nHijo;
-	}
-
+	}*/
+	Persona p = { "Ana Alves", 20, "Mujer", "Soltera", "Miscelanea", 500000, 3, 1, "Futbol", "Pollotariano", "Salado", "Hardcore zumba","Alajuela","San Ramón","Palmares", 1 };
+	modificarPersona(p, 15);
+	leerPersona(4);
 	return 0;
 }
