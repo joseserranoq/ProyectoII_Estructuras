@@ -39,7 +39,7 @@ struct Persona {
 	int edad;
 	char genero[7];
 	char estadoCivil[15];
-	char oficio[30];S
+	char oficio[30];
 	int sueldo;
 	int anosTrabajo;
 	int cantHijos;
@@ -164,11 +164,6 @@ void modificarPersona(Persona modificar, int posicion){
 }
 
 
-	cout << "No se encontro la persona";     //SE IMPRIME AUNQUE LA PERSONA YA ESTE AGREGADA �DEJAR MSJ O NO?
-	archivo.close();
-}
-
-
 int totalpersonas() { //cuenta el total de personas que hay en el archivo
 	ifstream archivo("lista.txt", ios::in | ios::binary);
 	struct Persona p;
@@ -188,7 +183,7 @@ int totalpersonas() { //cuenta el total de personas que hay en el archivo
 }
 
 //Se modifica la persona, segun el id ingresa de la persona a modificar
-void modificarPersona(Persona modificar, int posicion) {
+void modificarPersona(Persona*modificar, int posicion) {
 	/*
 	* FALTA AGREGAR LA VERIFICACION DE SI EXISTE LA POSCION EN EL ARCHIVO
 	*/
@@ -261,19 +256,20 @@ Nodo* creaNodoGenero(string valor,int posicion ,Nodo * r) { //falta el nexo a pa
 	Nodo* temp = r->nHijo;	//Nodo del nivel Genero
 	Nodo* tempAnt = r; //Nodo padre
 	while (temp != NULL) {
-		if (temp->nivel == "Genero") //si se encuentra el nivel, para el bucle
+		if (temp->nivel == "Genero"); //si se encuentra el nivel, para el bucle
 
+}
 }
 
 //agrega la poscion en las sublistas
-Lista* agregaPosicion(Nodo * temp, int posicion) {
+Lista* agregaPosicion(Nodo*temp,int posicion) {
 	//recorrer la sublista para colocar la posicion al final de la lista
 	Lista* tempL = temp->sublista;
 	Lista * nnL = new Lista(posicion);
 	nnL->nexoNodo = temp;
 
-	if (lista == NULL) {
-		lista = nnL;
+	if (Lista == NULL) {
+		Lista = nnL;
 	}
 	else {
 		Lista* tempL = lista;
@@ -658,8 +654,8 @@ void contarHojas(Nodo * raiz){
         contarHojas(tempSubLista);}
 
         tempSubLista = tempSubLista->sig; // Pasa al siguiente hijo
-    }
 }
+
 
 //Metodo para agregar una persosna al archivo
 void agregarPersona(){
