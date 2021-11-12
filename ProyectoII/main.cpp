@@ -13,6 +13,7 @@
 #include <cctype>
 #include <string>
 #include <iostream>
+#include <cstring>
 
 
 using namespace std;
@@ -256,7 +257,7 @@ Nodo* recorreNivel(string tipo) { // Sirve para recorrer los nodos y encontrar d
 }
 
 
-Nodo* recorreNodoH(Nodo* temp, string valor) { }// Recorre el nodo de manera horizontal para saber que valores tiene el nivel
+Nodo* recorreNodoH(Nodo* temp, string valor) { // Recorre el nodo de manera horizontal para saber que valores tiene el nivel
 	while (temp != NULL) {
 		if (temp->valor == valor) { //si existe el valor
 			return temp;
@@ -551,9 +552,12 @@ Nodo* arbolDecision(Nodo* r) {
 			while(t->sig != NULL)
 				temp = temp->sig;
 	*/
-
-	cout << "Se selecciona la opcion que desea \n1-edad  2-genero  3-estadoCivil  4-Oficio  5-Sueldo  6-Años de Trabajo  7-Cantidad de Hijos  8-Hobby  9-Tipo de Alimentacion\n  "
-		<< "10-Tipo de Comida  11-Tipo de Musica  12-Provincia  13-Canton  14-Distrito  15-Cantidad de Mascotas \nIntroduzca una opcion : ";
+	cout<<"\t\t\t-------------CREACION DEL ARBOL BINARIO---------------"<<endl;
+    cout << "Se selecciona la opcion que desea"<<endl;
+	cout << "\n1-Edad  2-Genero  3-Estado civil  4-Oficio "<<endl;
+    cout <<"5-Sueldo  6-Anios de trabajo  7-Cantidad de hijos  8-Hobby  9-Tipo de alimentacion"<<endl;
+	cout<< "10-Tipo de comida  11-Tipo de musica  12-Provincia  13-Canton  14-Distrito  15-Cantidad de mascotas"<<endl;
+	cout<<"\nIntroduzca una opcion : "<<endl;
 	string num;
 	cin >> num;
 	//valida si el string contiene numero enteros positivos sin caracteres
@@ -678,8 +682,7 @@ void contarHojas(Nodo* raiz) { // Metodo para contar nodos hojas del arbol de de
 			tempH = tempH->sig;
 		}
 	}
-	//si no se encuentra el nivel
-	return temp;
+	tempV = tempV->sig;
 }
 
 void numeroPersonaNivel() {
@@ -694,14 +697,12 @@ void numeroPersonaNivel() {
 
 		while (tempH != NULL) {
 			conPersona += tempH->cant;
-			cout << "Nivel" << conNivel << ": " << canPersona << endl;
+			cout << "Nivel" << conNivel << ": " << conPersona << endl;
 			tempH = tempH->sig;
 		}
 		tempV = tempV->sig;
 		conNivel++;
 	}
-	//si no se encuentra el nivel
-	return temp;
 }
 
 
@@ -712,7 +713,7 @@ void numeroPersonaNivel() {
 */
 
 
-void imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información completa del árbol en preorden.
+Nodo * imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información completa del árbol en preorden.
 
 	if (raiz == NULL)
 	{
@@ -723,6 +724,9 @@ void imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información comple
 	imprimirInformacionPreorden(raiz->nPadre);
 	imprimirInformacionPreorden(raiz->nHijo);
 }
+
+
+
 
 /*
 	Funciones que van a en el main.
@@ -736,7 +740,7 @@ void agregarPersona() { // Metodo para agregar una persosna al archivo
 
 	cout << "Nombre: " << endl;
 	getline(cin, datoString);
-	stri(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
+	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
 
 	cout << "Edad: " << endl;
 	cin >> personaNueva.edad;
@@ -797,10 +801,84 @@ void agregarPersona() { // Metodo para agregar una persosna al archivo
 	cout << "Cantidad de mascotas: " << endl;
 	cin >> personaNueva.numMascotas;
 	cin.ignore();
+
+	escribir(personaNueva);
 }
 
 void modPersona() { // Metodo para que el usuario pueda modificar a alguien del archivo.
+    Persona personaNueva;
 
+	string datoString;
+
+	cout << "Nombre: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
+
+	cout << "Edad: " << endl;
+	cin >> personaNueva.edad;
+	cin.ignore();
+
+	cout << "Genero: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.genero, datoString.c_str(), sizeof(personaNueva.genero));
+
+	cout << "Estado civil: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.estadoCivil, datoString.c_str(), sizeof(personaNueva.estadoCivil));
+
+	cout << "Oficio: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.oficio, datoString.c_str(), sizeof(personaNueva.oficio));
+
+	cout << "Sueldo: " << endl;
+	cin >> personaNueva.sueldo;
+	cin.ignore();
+
+	cout << "Años de trabajo: " << endl;
+	cin >> personaNueva.anosTrabajo;
+	cin.ignore();
+
+	cout << "Cantidad de hijos: " << endl;
+	cin >> personaNueva.cantHijos;
+	cin.ignore();
+
+	cout << "Hobby: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.hobby, datoString.c_str(), sizeof(personaNueva.hobby));
+
+	cout << "Tipo de alimentacion: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.tipoAlimentacion, datoString.c_str(), sizeof(personaNueva.tipoAlimentacion));
+
+	cout << "Tipo de comida: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.tipoComida, datoString.c_str(), sizeof(personaNueva.tipoComida));
+
+	cout << "Tipo de musica: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.tipoMusica, datoString.c_str(), sizeof(personaNueva.tipoMusica));
+
+	cout << "Provincia: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.provincia, datoString.c_str(), sizeof(personaNueva.provincia));
+
+	cout << "Canton: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.canton, datoString.c_str(), sizeof(personaNueva.canton));
+
+	cout << "Distrito: " << endl;
+	getline(cin, datoString);
+	strncpy(personaNueva.distrito, datoString.c_str(), sizeof(personaNueva.distrito));
+
+	cout << "Cantidad de mascotas: " << endl;
+	cin >> personaNueva.numMascotas;
+	cin.ignore();
+
+	int posicion;
+	cout <<"Ingrese la posicion que desea modificar en el archivo: "<<endl;
+	cin >> posicion;
+
+	modificarPersona(personaNueva, posicion);
 }
 
 
@@ -822,7 +900,34 @@ void personasMenu() {
 		agregarPersona();
 	}
 	if (opcion == 2) {
+        modPersona();
+	}
+	if (opcion == 3) {
+        //Borrar persona.
+	}
+	if (opcion == 4) {
+    int numeroPosicion;
+    cout <<"Ingrese el numero de posicion que desea leer: "<<endl;
+    cin >> numeroPosicion;
+    leerPersona(numeroPosicion);
+	}
+}
 
+void consultas(){
+    int opcion;
+    cout << "1. Imprimir la cantidad de hojas en el arbol. " << endl;
+	cout << "2. Imprimir la cantidad de nodos en un nivel deseado." << endl;
+	cout << "3. Imprimir cual categoria tiene mas valores diferentes, \nrecorriendo todo el arbol. Debe validar si la categoria esta o no el arbol." << endl;
+	cout << "4. Imprimir en el nivel deseado cual es el valor de la caracteristica \ncon mayor cantidad de personas y cual es la que tiene menor cantidad de personas!= de cero." << endl;
+    cout << "5. Imprimir la comprobacion de la suma de todas las cantidades por nivel." << endl;
+	cout << "6. Imprimir la cantidad de una caracteristica con un valor en especifico recorriendo el archivo, \nademas, imprimir la cantidad de una caracteristica con un valor en especifico recorriendo \nel arbol creado. Si en el arbol actual no se realizo esa clasificacion indicarlo o si no hay con ese determinado \nvalor indicarlo tambien. " << endl;
+	cout << "\nIngrese una opcion: " << endl;
+	cin >> opcion;
+
+	if (opcion == 1) {
+
+	}
+	if (opcion == 2) {
 
 	}
 	if (opcion == 3) {
@@ -830,27 +935,63 @@ void personasMenu() {
 	}
 	if (opcion == 4) {
 
-		leerPersona()
 	}
+	if (opcion == 5) {
+
+	}
+	if (opcion == 6) {
+
+
+	}
+
 }
 
+void reportes(){
+    int opcion;
+    cout << "1. Imprimir la informacion completa del arbol en preorden." << endl;
+	cout << "2. Imprimir la informacion completa del arbol por cada flujo de informacion." << endl;
+	cout << "3. Imprimir el arbol en anchura (por niveles) indicando el nivel respectivo." << endl;
+	cout << "4. Imprimir la subClasificacion de una rama en especifico. Se debe solicitar caracteristica y valor." << endl;
+    cout << "5. Imprimir toda la informacion central del nodo." << endl;
+	cout << "\nIngrese una opcion: " << endl;
+	cin >> opcion;
+
+	if (opcion == 1) {
+
+	}
+	if (opcion == 2) {
+
+	}
+	if (opcion == 3) {
+
+	}
+	if (opcion == 4) {
+
+	}
+	if (opcion == 5) {
+
+	}
+}
 /*
 	Main
 */
 
 void menu() {
+
 	int opcionPrincipal;
 	bool repetir = true;
 
 	do {
-		cout << "1. Creacion del arbol binario" << endl;
+        cout << "\t\t\t---------------------Menu-------------------"<<endl;
+		cout << "\n1. Creacion del arbol binario" << endl;
 		cout << "2. Opciones del arbol binario" << endl,
 
-			cout << "Ingrese una opcion: " << endl;
+			cout << "\nIngrese una opcion: " << endl;
 		cin >> opcionPrincipal;
 
 		if (opcionPrincipal == 1) {
 			//Metodo de la creacion del arbol binario creado a la manera del usuario.
+			arbolDecision(raiz);
 
 		}
 		if (opcionPrincipal == 2) {
@@ -862,13 +1003,13 @@ void menu() {
 			cout << "Ingrese una opcion: " << endl;
 			cin >> opcionSegundaria;
 			if (opcionSegundaria == 1) {
-
+                personasMenu();
 			}
 			if (opcionSegundaria == 2) {
-
+                consultas();
 			}
 			if (opcionSegundaria == 3) {
-
+                reportes();
 			}
 		}
 
@@ -890,7 +1031,7 @@ void datosQuemados() {
 	escribir(p2);
 	Persona p3 = { "Carlos Rojas", 37, "Hombre", "Soltero", "Chef", 500000, 3, 0, "Ver series", "Omnivoro", "Dulce", "Salsa","Alajuela","San Carlos","La Palmera", 5 };
 	escribir(p3);
-	Persona p4 = { "Alina Acu�a", 25, "mujer", "Soltera", "Enfermera", 700000, 5, 2, "Tenis", "Lactovegetariano", "Agridulce", "Merengue","Alajuela","Grecia","Bolivar", 1 };
+	Persona p4 = { "Alina Araya", 25, "mujer", "Soltera", "Enfermera", 700000, 5, 2, "Tenis", "Lactovegetariano", "Agridulce", "Merengue","Alajuela","Grecia","Bolivar", 1 };
 	escribir(p4);
 	Persona p5 = { "Jose Quesada", 21, "Hombre", "Casado", "Programador", 1000000, 3, 0, "Jugar play", "Vegetariano", "Picante", "Merengue","Alajuela","San Ramon","Palmares", 2 };
 	escribir(p5);
@@ -989,28 +1130,7 @@ void datosQuemados() {
 
 int main()
 {
-	datosQuemados();
-	//Busca la persona por el nombre.
-	raiz = generaRaiz();
-	raiz = arbolDecision(raiz);
-	cout << endl << raiz->cant << endl << raiz->nHijo->valor << endl << raiz->nHijo->sig->valor << endl;
-
-
-	numeroPersonaNivel();
-
-	/*buscaPersona("Jose Quesada");
-	//El metodo leerPersona, imprime toda la imformacion de la persona.
-	leerPersona(4);
-
-	//buscaPersona("Jose Quesada");
-	//El metodo leerPersona, imprime toda la imformacion de la persona.
-	cout << "\n\n-----Persona que se quiere modificar-----" << endl;
-	leerPersona(6);
-	Persona modificar = { "Juliana Ramirez", 32, "Mujer", "Casada", "Profesora", 450000, 15, 1, "Jugar Futbol", "Omnivoro", "Dulce", "Valadas","Ciudad Quesasa","San Carlos","Pocosol" };
-	modificarPersona(modificar, 6);
-	cout << "\n\n-----Persona ya modificada-----" << endl;
-	leerPersona(6);
-
-	//cout << "El tama�o de la estructura:  " << sizeof(Persona);*/
+    datosQuemados();
+    menu();
 	return 0;
 }
