@@ -13,6 +13,7 @@
 #include <cctype>
 #include <string>
 #include <iostream>
+#include <cstring>
 
 
 using namespace std;
@@ -256,7 +257,7 @@ Nodo* recorreNivel(string tipo) { // Sirve para recorrer los nodos y encontrar d
 }
 
 
-Nodo* recorreNodoH(Nodo* temp, string valor) { }// Recorre el nodo de manera horizontal para saber que valores tiene el nivel
+Nodo* recorreNodoH(Nodo* temp, string valor) { // Recorre el nodo de manera horizontal para saber que valores tiene el nivel
 	while (temp != NULL) {
 		if (temp->valor == valor) { //si existe el valor
 			return temp;
@@ -679,12 +680,13 @@ void contarHojas(Nodo* raiz) { // Metodo para contar nodos hojas del arbol de de
 		}
 	}
 	//si no se encuentra el nivel
-	return temp;
+	//return temp;
 }
 
 void numeroPersonaNivel() {
 	//Contadores
 	int conNivel = 0;
+	int conPersona=0;
 	//Punteros
 	Nodo* tempV = raiz;
 	//Para recorrer hacia abajo.
@@ -694,24 +696,28 @@ void numeroPersonaNivel() {
 
 		while (tempH != NULL) {
 			conPersona += tempH->cant;
-			cout << "Nivel" << conNivel << ": " << canPersona << endl;
+			cout << "Nivel" << conNivel << ": " << conPersona << endl;
 			tempH = tempH->sig;
 		}
 		tempV = tempV->sig;
 		conNivel++;
 	}
 	//si no se encuentra el nivel
-	return temp;
+	//return temp;
 }
 
 
 
 
+
+//Reportes
+
+void imprimirArbolAnchura(){
+}
+
+
+
 /*
-	Reportes
-*/
-
-
 void imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información completa del árbol en preorden.
 
 	if (raiz == NULL)
@@ -722,7 +728,7 @@ void imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información comple
 	cout << raiz << endl;  // Aqui falta algo mas?
 	imprimirInformacionPreorden(raiz->nPadre);
 	imprimirInformacionPreorden(raiz->nHijo);
-}
+}*/
 
 /*
 	Funciones que van a en el main.
@@ -736,7 +742,7 @@ void agregarPersona() { // Metodo para agregar una persosna al archivo
 
 	cout << "Nombre: " << endl;
 	getline(cin, datoString);
-	stri(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
+	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
 
 	cout << "Edad: " << endl;
 	cin >> personaNueva.edad;
@@ -799,10 +805,6 @@ void agregarPersona() { // Metodo para agregar una persosna al archivo
 	cin.ignore();
 }
 
-void modPersona() { // Metodo para que el usuario pueda modificar a alguien del archivo.
-
-}
-
 
 /*
 	Partes del Main.
@@ -830,7 +832,7 @@ void personasMenu() {
 	}
 	if (opcion == 4) {
 
-		leerPersona()
+		//leerPersona()
 	}
 }
 
@@ -991,9 +993,9 @@ int main()
 {
 	datosQuemados();
 	//Busca la persona por el nombre.
-	raiz = generaRaiz();
-	raiz = arbolDecision(raiz);
-	cout << endl << raiz->cant << endl << raiz->nHijo->valor << endl << raiz->nHijo->sig->valor << endl;
+	//raiz = generaRaiz();
+	//raiz = arbolDecision(raiz);
+	//cout << endl << raiz->cant << endl << raiz->nHijo->valor << endl << raiz->nHijo->sig->valor << endl;
 
 
 	numeroPersonaNivel();
