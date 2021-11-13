@@ -670,7 +670,7 @@ Nodo* arbolDecision(Nodo* r) {
 */
 
 int hoja = 0;
-void contarHojas(Nodo* raiz) { // Metodo para contar nodos hojas del arbol de decision.
+void consultaUno(Nodo* raiz) { // Metodo para contar nodos hojas del arbol de decision.
 	Nodo* tempV = raiz;
 	//Para recorrer hacia abajo.
 	while (tempV == NULL) {
@@ -810,7 +810,7 @@ void modPersona() { // Metodo para que el usuario pueda modificar a alguien del 
 
 	string datoString;
 
-	cout << "Nombre: " << endl;
+	cout << "Nombre: "<<endl;
 	getline(cin, datoString);
 	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
 
