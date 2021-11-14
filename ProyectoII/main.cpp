@@ -14,7 +14,8 @@
 #include <string>
 #include <iostream>
 #include <cstring>
-
+#include <stdio.h>
+#include <string.h>
 
 using namespace std;
 
@@ -114,7 +115,6 @@ bool verificaPosicionArch(int posicion) {	// Funciona para comprobar que exista 
 	return false;
 }
 
-
 void leer() // El metodo leer, imprime toda la informacion del txt.
 {
 	ifstream archivo("lista.txt", ios::in | ios::binary);
@@ -135,7 +135,6 @@ void leer() // El metodo leer, imprime toda la informacion del txt.
 	}
 	archivo.close();
 }
-
 
 int buscaPersona(string nombre) // Se busca la persona del archivo y retorna su posicion que posee en el archivo
 {
@@ -161,6 +160,32 @@ int buscaPersona(string nombre) // Se busca la persona del archivo y retorna su 
 	}
 	cout << "No se encontró el nombre" << endl;
 	archivo.close();
+}
+bool boolBuscaPersona(string nombre) // Se busca la persona del archivo si esta repetida
+{
+	ifstream archivo("lista.txt", ios::in | ios::binary);
+	struct Persona p;
+	if (archivo.fail()) {
+		cout << "\nNo se pudo abrir el archivo" << endl;
+		exit(1);
+	}
+	//archivo.seekg(0);
+	int index = 0;
+	archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	while (!archivo.eof()) {//end of file
+		if (p.nombre == nombre)
+		{
+			archivo.close();
+			cout << "\nNombre repetido encuentra en la posicion: " << index << endl;
+			return true;
+		}
+
+		index++;
+		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	}
+	cout << "Nombre no esta repetido en el archivo, proceda con los demas valores" << endl;
+	archivo.close();
+	return false;
 }
 
 
@@ -213,7 +238,7 @@ void modificarPersona(Persona modificar, int posicion) { // Se modifica la perso
 		cout << "\nEl archivo no se puede abrir";
 		exit(1);
 	}
-	if (verificaPosicionArch(posicion)) {
+	if (verificaPosicionArch(posicion)) {	//verifica que exista esa posicion en el archivo
 		archivo.seekp(posicion * sizeof(modificar), ios::beg);
 		archivo.write(reinterpret_cast<char*>(&modificar), sizeof(modificar));
 		archivo.close(); //se cierra el archivo
@@ -251,7 +276,6 @@ Nodo* recorreNivel(string tipo) { // Sirve para recorrer los nodos y encontrar d
 	return temp;
 }
 
-
 Nodo* recorreNodoH(Nodo* temp, string valor) { // Recorre el nodo de manera horizontal para saber que valores tiene el nivel
 	while (temp != NULL) {
 		if (temp->valor == valor) { //si existe el valor
@@ -261,7 +285,6 @@ Nodo* recorreNodoH(Nodo* temp, string valor) { // Recorre el nodo de manera hori
 	}
 	return NULL; //si no existe va a ser NULL
 }
-
 
 Lista* agregaPosicion(Nodo* temp, int posicion) { // Agrega la poscion en las sublistas
 	//recorrer la sublista para colocar la posicion al final de la lista
@@ -659,27 +682,6 @@ void contarHojas() { // Metodo para contar nodos hojas del arbol de decision.
 	cout << "Cantidad de hojas en el arbol: " << hoja<<endl;
 }
 
-//Consulta 5
-void numeroPersonaNivel() {
-	//Contadores
-	int conNivel = 0;
-	//Punteros
-	Nodo* tempV = raiz;
-	//Para recorrer hacia abajo.
-	while (tempV != NULL) {
-		int conPersona = 0;
-		Nodo* tempH = tempV;
-
-		while (tempH != NULL) {
-			conPersona += tempH->cant;
-			cout << "Nivel" << conNivel << ": " << conPersona << endl;
-			tempH = tempH->sig;
-		}
-		tempV = tempV->sig;
-		conNivel++;
-	}
-}
-
 //Consulta 2
 void imprimeNodoNivelx() {
 	string nivel;
@@ -756,10 +758,12 @@ void imprimeValorMayMen() {
 				if (cMayor <= tempV->cant) {	//busca el mayor
 					cMayor = tempV->cant;
 					nMayor = tempV->valor;
+					cout << cMayor << " " << nMayor << endl;
 				}
 				if (cMenor >= tempV->cant) {	//busca el menor
 					cMenor = tempV->cant;
 					nMenor = tempV->valor;
+					cout << cMenor << " " << nMenor << endl;
 				}
 				tempV = tempV->sig;
 			}
@@ -771,96 +775,183 @@ void imprimeValorMayMen() {
 	return;
 }
 
+//Consulta 5
+void numeroPersonaNivel() {
+	//Contadores
+	int conNivel = 0;
+	//Punteros
+	Nodo* tempV = raiz;
+	//Para recorrer hacia abajo.
+	while (tempV != NULL) {
+		int conPersona = 0;
+		Nodo* tempH = tempV;
+		while (tempH != NULL) {
+			conPersona += tempH->cant;
+			tempH = tempH->sig;
+		}
+		cout << "Nivel" << conNivel << ": " << conPersona << endl;
+		tempV = tempV->nHijo;
+		conNivel++;
+	}
+}
+
+//Consulta 6		***no esta hecha
+/*void buscaValorArch(string tipo, string valor) {
+	int cont = 0;
+	ifstream archivo("lista.txt", ios::in | ios::binary);
+	struct Persona p;
+	if (archivo.fail()) {
+		cout << "\nNo se pudo abrir el archivo" << endl;
+		exit(1);
+	}
+	archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	while (!archivo.eof()) {//end of file
+		if (tipo == "Edad")
+		{
+
+		}
+		else if (tipo == "Genero" && p.genero == valor)
+			cont += 1;
+
+		else if(tipo == "Estado Civil" && p.estadoCivil==valor)
+			cont += 1;
+		else if(tipo == "Oficio" && p.oficio == valor)
+			cont += 1;
+		else if(tipo == "Sueldo" && p.sueldo == valor)
+			cont += 1;
+		else if(tipo == "Anos de Trabajo" && p.anosTrabajo == valor)
+			cont += 1;
+		else if(tipo == "Cantidad de Hijos" && p.anosTrabajo == valor)
+			cont += 1;
+		else if(tipo == "Hobby" && p.hobby == valor)
+			cont += 1;
+		else if (tipo == "Tipo de Alimentacion")
+			cont += 1;
+		else if(tipo == "Tipo de Comida")
+			cont += 1;
+		else if(tipo == "Tipo de Musica")
+			cont += 1;
+		else if(tipo == "Provincia")
+			cont += 1;
+		else if(tipo == "Canton")
+			cont += 1;
+		else if(tipo == "Distrito")
+			cont += 1;
+		else if(tipo == "Numero Mascotas")
+			cont += 1;
+		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+	}
+	cout << "No se encontró el nombre" << endl;
+	archivo.close();
+}
+
+void imprimeTipoArchArbol() {
+	string tipoArch;
+	string valorArch;
+	string tipoArb;
+	string valorArb;
+	cout << "Digite la caracteristica que desea buscar en el archivo: " << endl;
+	getline(cin, tipoArch);
+	cout << "Digite el valor que desea buscar en el archivo: " << endl;
+	getline(cin, valorArch);
+	cout << "Digite la caracteristica que desea buscar en el Arbol: " << endl;
+	getline(cin, tipoArb);
+	cout << "Digite el valor que desea buscar en el Arbol: " << endl;
+	getline(cin, valorArb);
+
+}*/
 
 	//Reportes
-
-Nodo* imprimirInformacionPreorden(Nodo* raiz) { //Imprimir la información completa del árbol en preorden.
-
-	if (raiz == NULL)
+//Reporte 1
+Nodo* imprimirInformacionPreorden(Nodo*n) { //Imprimir la información completa del árbol en preorden.
+	if (n == NULL)
 	{
-		return raiz;
+		return n;
 	}
 
-	cout << raiz << endl;  // Aqui falta algo mas?
-	imprimirInformacionPreorden(raiz->nPadre);
-	imprimirInformacionPreorden(raiz->nHijo);
+	cout << n << endl;  // Aqui falta algo mas?
+	imprimirInformacionPreorden(n->nPadre);
+	imprimirInformacionPreorden(n->nHijo);
+	//n -> sig;
 }
 
 /*
 	Funciones que van a en el main.
 */
 
-/*
+
 void agregarPersona() { // Metodo para agregar una persosna al archivo
-	Persona personaNueva;
 
 	string datoString;
-
 	cout << "Nombre: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
+	if (!boolBuscaPersona(datoString)) {
+		Persona personaNueva;
 
-	cout << "Edad: " << endl;
-	cin >> personaNueva.edad;
-	cin.ignore();
+		strncpy_s(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
 
-	cout << "Genero: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.genero, datoString.c_str(), sizeof(personaNueva.genero));
+		cout << "Edad: " << endl;
+		cin >> personaNueva.edad;
+		cin.ignore();
 
-	cout << "Estado civil: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.estadoCivil, datoString.c_str(), sizeof(personaNueva.estadoCivil));
+		cout << "Genero: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.genero, datoString.c_str(), sizeof(personaNueva.genero));
 
-	cout << "Oficio: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.oficio, datoString.c_str(), sizeof(personaNueva.oficio));
+		cout << "Estado civil: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.estadoCivil, datoString.c_str(), sizeof(personaNueva.estadoCivil));
 
-	cout << "Sueldo: " << endl;
-	cin >> personaNueva.sueldo;
-	cin.ignore();
+		cout << "Oficio: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.oficio, datoString.c_str(), sizeof(personaNueva.oficio));
 
-	cout << "Años de trabajo: " << endl;
-	cin >> personaNueva.anosTrabajo;
-	cin.ignore();
+		cout << "Sueldo: " << endl;
+		cin >> personaNueva.sueldo;
+		cin.ignore();
 
-	cout << "Cantidad de hijos: " << endl;
-	cin >> personaNueva.cantHijos;
-	cin.ignore();
+		cout << "Años de trabajo: " << endl;
+		cin >> personaNueva.anosTrabajo;
+		cin.ignore();
 
-	cout << "Hobby: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.hobby, datoString.c_str(), sizeof(personaNueva.hobby));
+		cout << "Cantidad de hijos: " << endl;
+		cin >> personaNueva.cantHijos;
+		cin.ignore();
 
-	cout << "Tipo de alimentacion: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.tipoAlimentacion, datoString.c_str(), sizeof(personaNueva.tipoAlimentacion));
+		cout << "Hobby: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.hobby, datoString.c_str(), sizeof(personaNueva.hobby));
 
-	cout << "Tipo de comida: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.tipoComida, datoString.c_str(), sizeof(personaNueva.tipoComida));
+		cout << "Tipo de alimentacion: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.tipoAlimentacion, datoString.c_str(), sizeof(personaNueva.tipoAlimentacion));
 
-	cout << "Tipo de musica: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.tipoMusica, datoString.c_str(), sizeof(personaNueva.tipoMusica));
+		cout << "Tipo de comida: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.tipoComida, datoString.c_str(), sizeof(personaNueva.tipoComida));
 
-	cout << "Provincia: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.provincia, datoString.c_str(), sizeof(personaNueva.provincia));
+		cout << "Tipo de musica: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.tipoMusica, datoString.c_str(), sizeof(personaNueva.tipoMusica));
 
-	cout << "Canton: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.canton, datoString.c_str(), sizeof(personaNueva.canton));
+		cout << "Provincia: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.provincia, datoString.c_str(), sizeof(personaNueva.provincia));
 
-	cout << "Distrito: " << endl;
-	getline(cin, datoString);
-	strncpy(personaNueva.distrito, datoString.c_str(), sizeof(personaNueva.distrito));
+		cout << "Canton: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.canton, datoString.c_str(), sizeof(personaNueva.canton));
 
-	cout << "Cantidad de mascotas: " << endl;
-	cin >> personaNueva.numMascotas;
-	cin.ignore();
+		cout << "Distrito: " << endl;
+		getline(cin, datoString);
+		strncpy_s(personaNueva.distrito, datoString.c_str(), sizeof(personaNueva.distrito));
 
-	escribir(personaNueva);
+		cout << "Cantidad de mascotas: " << endl;
+		cin >> personaNueva.numMascotas;
+		cin.ignore();
+		escribir(personaNueva);
+		cout << "Se ha agregado la persona" << endl;
+	}
 }
 
 void modPersona() { // Metodo para que el usuario pueda modificar a alguien del archivo.
@@ -870,7 +961,7 @@ void modPersona() { // Metodo para que el usuario pueda modificar a alguien del 
 
 	cout << "Nombre: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
+	strncpy_s(personaNueva.nombre, datoString.c_str(), sizeof(personaNueva.nombre));
 
 	cout << "Edad: " << endl;
 	cin >> personaNueva.edad;
@@ -878,15 +969,15 @@ void modPersona() { // Metodo para que el usuario pueda modificar a alguien del 
 
 	cout << "Genero: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.genero, datoString.c_str(), sizeof(personaNueva.genero));
+	strncpy_s(personaNueva.genero, datoString.c_str(), sizeof(personaNueva.genero));
 
 	cout << "Estado civil: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.estadoCivil, datoString.c_str(), sizeof(personaNueva.estadoCivil));
+	strncpy_s(personaNueva.estadoCivil, datoString.c_str(), sizeof(personaNueva.estadoCivil));
 
 	cout << "Oficio: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.oficio, datoString.c_str(), sizeof(personaNueva.oficio));
+	strncpy_s(personaNueva.oficio, datoString.c_str(), sizeof(personaNueva.oficio));
 
 	cout << "Sueldo: " << endl;
 	cin >> personaNueva.sueldo;
@@ -902,31 +993,31 @@ void modPersona() { // Metodo para que el usuario pueda modificar a alguien del 
 
 	cout << "Hobby: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.hobby, datoString.c_str(), sizeof(personaNueva.hobby));
+	strncpy_s(personaNueva.hobby, datoString.c_str(), sizeof(personaNueva.hobby));
 
 	cout << "Tipo de alimentacion: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.tipoAlimentacion, datoString.c_str(), sizeof(personaNueva.tipoAlimentacion));
+	strncpy_s(personaNueva.tipoAlimentacion, datoString.c_str(), sizeof(personaNueva.tipoAlimentacion));
 
 	cout << "Tipo de comida: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.tipoComida, datoString.c_str(), sizeof(personaNueva.tipoComida));
+	strncpy_s(personaNueva.tipoComida, datoString.c_str(), sizeof(personaNueva.tipoComida));
 
 	cout << "Tipo de musica: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.tipoMusica, datoString.c_str(), sizeof(personaNueva.tipoMusica));
+	strncpy_s(personaNueva.tipoMusica, datoString.c_str(), sizeof(personaNueva.tipoMusica));
 
 	cout << "Provincia: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.provincia, datoString.c_str(), sizeof(personaNueva.provincia));
+	strncpy_s(personaNueva.provincia, datoString.c_str(), sizeof(personaNueva.provincia));
 
 	cout << "Canton: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.canton, datoString.c_str(), sizeof(personaNueva.canton));
+	strncpy_s(personaNueva.canton, datoString.c_str(), sizeof(personaNueva.canton));
 
 	cout << "Distrito: " << endl;
 	getline(cin, datoString);
-	strncpy(personaNueva.distrito, datoString.c_str(), sizeof(personaNueva.distrito));
+	strncpy_s(personaNueva.distrito, datoString.c_str(), sizeof(personaNueva.distrito));
 
 	cout << "Cantidad de mascotas: " << endl;
 	cin >> personaNueva.numMascotas;
@@ -938,8 +1029,49 @@ void modPersona() { // Metodo para que el usuario pueda modificar a alguien del 
 
 	modificarPersona(personaNueva, posicion);
 }
-*/
 
+void escribeTemporal(Persona p) {
+	fstream archivo("temporal.txt", ios::in | ios::out | ios::binary);
+	if (archivo.fail()) {
+		cout << "\nNo se pudo abrir el archivo";
+		exit(1);
+	}
+	archivo.seekp(0, ios::end);
+	archivo.write(reinterpret_cast<char*>(&p), sizeof(p));
+	archivo.close(); //se cierra el archivo
+}
+
+void eliminarPersona() {
+	string nom;
+	cout << "Digite el nombre y apellido que desea eliminar de la lista" << endl;
+	getline(cin, nom);
+	ifstream archivo("lista.txt", ios::in | ios::out | ios::binary);		//"lista.txt", ios::in | ios::out | ios::binary
+	fstream temporal("temporal.txt", ios::in | ios::out | ios::binary | ios::trunc);
+	struct Persona p;
+
+	if (archivo.fail()) {
+		cout << "\nNo se pudo abrir el archivo";
+		exit(1);
+	}
+	else {
+		if (buscaPersona(nom)) {
+			archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+			while (!archivo.eof()) {
+				if (p.nombre == nom) {
+					cout << "\nDato eliminado" << endl;
+				}
+				else {
+					escribeTemporal(p);
+				}
+				archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
+			}
+		}
+	}
+	temporal.close();
+	archivo.close();
+	remove("lista.txt");
+	rename("temporal.txt", "lista.txt");
+}
 /*
 	Partes del Main.
 */
@@ -954,13 +1086,13 @@ void personasMenu() {
 	cin >> opcion;
 
 	if (opcion == 1) {
-		//agregarPersona();
+		agregarPersona();
 	}
 	if (opcion == 2) {
-		//modPersona();
+		modPersona();
 	}
 	if (opcion == 3) {
-		//Borrar persona.
+		eliminarPersona();
 	}
 	if (opcion == 4) {
 		int numeroPosicion;
@@ -1091,7 +1223,7 @@ void datosQuemados() {
 	escribir(p7);
 	Persona p8 = { "Carlos Vaca", 37, "Hombre", "Divorciado", "Ebanista", 2000000, 20, 10, "Pintar", "Omnivoro", "Salado", "Rock","Heredia","San Rafael","La Plaza", 2 };
 	escribir(p8);
-	Persona p9 = { "Alba Cascarron", 50, "Mujer", "Viuda", "Costurera", 300000, 25, 2, "Ver television", "Crudismo", "Dulce", "Techno","Puntarenas","Buenos Aires","La Penca", 1 };
+	Persona p9 = {"Alba Cascarron", 50, "Mujer", "Viuda", "Costurera", 300000, 25, 2, "Ver television", "Crudismo", "Dulce", "Techno","Puntarenas","Buenos Aires","La Penca", 1};
 	escribir(p9);
 	Persona p10 = { "Marlen Montero", 48, "Mujer", "Casada", "Ama de casa", 150000, 0, 5, "Ver novelas", "Lactovegetariano", "Agridulce", "Rock","Alajuela","San Carlos","La Tigra", 3 };
 	escribir(p10);
@@ -1182,5 +1314,6 @@ int main()
 {
 	datosQuemados();
 	menu();
+	eliminarPersona();
 	return 0;
 }
