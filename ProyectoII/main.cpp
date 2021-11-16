@@ -649,7 +649,7 @@ Nodo* arbolDecision(Nodo* r) {	//Se realiza el arbol de decision
 	else
 		cout << "Dato incorrecto" << endl;
 	//Sale del condicional anterior
-	cout << endl << "Desea continuar?" << endl << "digite cualquier tecla para continuar o digite 0 para terminar" << endl;
+	cout << endl << "Desea continuar?" << endl << "digite cualquier numero del 1-9 para continuar o digite 0 para terminar" << endl;
 	int op;
 	cin >> op;
 
@@ -795,9 +795,16 @@ void numeroPersonaNivel() {
 	}
 }
 
-//Consulta 6		***no esta hecha
-/*void buscaValorArch(string tipo, string valor) {
+//Consulta 6
+void buscaValorArch() {
 	int cont = 0;
+	string tipo;
+	string valor;
+	cin.ignore();
+	cout << "Digite la caracteristica que desea buscar en el archivo: "<<endl;
+	getline(cin, tipo);
+	cout << "Digite el valor que desea buscar en el archivo: " << endl;
+	getline(cin, valor);
 	ifstream archivo("lista.txt", ios::in | ios::binary);
 	struct Persona p;
 	if (archivo.fail()) {
@@ -806,73 +813,153 @@ void numeroPersonaNivel() {
 	}
 	archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
 	while (!archivo.eof()) {//end of file
-		if (tipo == "Edad")
-		{
-
-		}
+		if (tipo == "Edad" && determinaValorEdad(p.edad) == valor)
+			cont += 1;
 		else if (tipo == "Genero" && p.genero == valor)
 			cont += 1;
-
 		else if(tipo == "Estado Civil" && p.estadoCivil==valor)
 			cont += 1;
 		else if(tipo == "Oficio" && p.oficio == valor)
 			cont += 1;
-		else if(tipo == "Sueldo" && p.sueldo == valor)
+		else if(tipo == "Sueldo" && determinaValorSueldo(p.sueldo) == valor)
 			cont += 1;
-		else if(tipo == "Anos de Trabajo" && p.anosTrabajo == valor)
+		else if(tipo == "Anos de Trabajo" &&  determinaValorAnosT(p.anosTrabajo)== valor)
 			cont += 1;
-		else if(tipo == "Cantidad de Hijos" && p.anosTrabajo == valor)
+		else if(tipo == "Cantidad de Hijos" && determinaValorCantH(p.cantHijos) == valor)
 			cont += 1;
 		else if(tipo == "Hobby" && p.hobby == valor)
 			cont += 1;
-		else if (tipo == "Tipo de Alimentacion")
+		else if (tipo == "Tipo de Alimentacion" && p.tipoAlimentacion == valor)
 			cont += 1;
-		else if(tipo == "Tipo de Comida")
+		else if(tipo == "Tipo de Comida" && p.tipoComida == valor)
 			cont += 1;
-		else if(tipo == "Tipo de Musica")
+		else if(tipo == "Tipo de Musica" && p.tipoMusica == valor)
 			cont += 1;
-		else if(tipo == "Provincia")
+		else if(tipo == "Provincia" && p.provincia == valor)
 			cont += 1;
-		else if(tipo == "Canton")
+		else if(tipo == "Canton" && p.canton == valor)
 			cont += 1;
-		else if(tipo == "Distrito")
+		else if(tipo == "Distrito" && p.distrito == valor)
 			cont += 1;
-		else if(tipo == "Numero Mascotas")
+		else if(tipo == "Numero Mascotas" && determinaValorCantM(p.numMascotas) == valor)
 			cont += 1;
 		archivo.read(reinterpret_cast<char*>(&p), sizeof(p));
 	}
-	cout << "No se encontró el nombre" << endl;
 	archivo.close();
+	cout << "En el archivo:\n" << tipo << "= " << valor << "= " << cont << endl;
+	//return cont;
 }
 
+void buscaValorArbol() {
+	string tipo;
+	string valor;
+	int cont =0;
+	cout << "Digite la caracteristica que desea buscar en el Arbol: " << endl;
+	getline(cin, tipo);
+	cout << "Digite el valor que desea buscar en el Arbol: " << endl;
+	getline(cin, valor);
+	Nodo* temp = raiz;
+	while (temp != NULL) {	//Para localizar el nivel
+		if (temp->nivel == tipo)
+			break;
+		temp = temp->nHijo;
+	}
+	if (temp != NULL) {	//localiza el valor
+		while (temp != NULL) {
+			if (temp->valor == valor)
+				cont= temp->cant;
+			temp = temp ->sig;
+		}
+	}
+	cout << "En el Arbol:\n" << tipo << "= " << valor << "= " << cont << endl;
+	//return 0;
+}
 void imprimeTipoArchArbol() {
-	string tipoArch;
+	/*string tipoArch;
 	string valorArch;
 	string tipoArb;
 	string valorArb;
-	cout << "Digite la caracteristica que desea buscar en el archivo: " << endl;
+	cout << "Digite la caracteristica que desea buscar en el archivo: ";
 	getline(cin, tipoArch);
 	cout << "Digite el valor que desea buscar en el archivo: " << endl;
-	getline(cin, valorArch);
-	cout << "Digite la caracteristica que desea buscar en el Arbol: " << endl;
+	getline(cin,valorArch);*/
+	buscaValorArch();
+	//cout << "En el archivo:\n" << tipoArch << "= " << valorArch << "= " << contArch<<endl;
+
+	/*cout << "Digite la caracteristica que desea buscar en el Arbol: " << endl;
 	getline(cin, tipoArb);
 	cout << "Digite el valor que desea buscar en el Arbol: " << endl;
-	getline(cin, valorArb);
+	getline(cin, valorArb);*/
+	buscaValorArbol();
+	//cout << "En el Arbol:\n" << tipoArb << "= " << valorArb << "= " << contArbol << endl;
 
-}*/
+}
 
 	//Reportes
 //Reporte 1
-Nodo* imprimirInformacionPreorden(Nodo*n) { //Imprimir la información completa del árbol en preorden.
+Nodo * imprimirInformacionPreorden(Nodo*n) { //Imprimir la información completa del árbol en preorden.
 	if (n == NULL)
 	{
 		return n;
 	}
 
-	cout << n << endl;  // Aqui falta algo mas?
+	cout << n->nivel << endl;  // Aqui falta algo mas?
 	imprimirInformacionPreorden(n->nPadre);
 	imprimirInformacionPreorden(n->nHijo);
 	//n -> sig;
+}
+
+//Reporte 2
+void imprimeTodo() {
+	Nodo* temp = raiz->nHijo;
+	while (temp != NULL) {
+		cout << temp->nivel << " : ";
+		Nodo* tempL = temp;
+		while (tempL != NULL) {
+			cout <<tempL->valor<<" = "<<tempL->cant<<"\t";
+			tempL = tempL->sig;
+		}
+		temp = temp->nHijo;
+		cout << endl;
+	}
+
+}
+//Reporte 3
+void imprimeAnchura() {
+	Nodo* temp = raiz->nHijo;
+	while (temp != NULL) {
+		int ancho = 0;
+		Nodo* tempL = temp;
+		while (tempL != NULL) {
+			ancho += 1;
+			tempL = tempL->sig;
+		}
+		cout << temp->nivel << " : " << ancho<<endl;
+		temp = temp->nHijo;
+	}
+}
+//Reporte 4
+void imprimenHijo() {
+	string padre;
+	cin.ignore();
+	cout << "Digite el Nodo Padre: " << endl;
+	getline(cin, padre);
+	Nodo* temp = raiz;
+	while (temp != NULL) {
+		if (temp->nivel == padre)
+			break;
+		temp = temp->nHijo;
+	}
+	if (temp != NULL) {
+		Nodo* tempL = temp;
+		while (tempL != NULL) {
+			cout << tempL->nivel << " : " << tempL->valor << endl;
+			tempL = tempL->sig;
+		}
+	}
+	else {
+		cout << "No existe el nodo digitado"<<endl;
+	}
 }
 
 /*
@@ -1129,6 +1216,7 @@ void consultas() {
 		numeroPersonaNivel();
 	}
 	if (opcion == 6) {
+		imprimeTipoArchArbol();
 	}
 
 }
@@ -1139,24 +1227,20 @@ void reportes() {
 	cout << "2. Imprimir la informacion completa del arbol por cada flujo de informacion." << endl;
 	cout << "3. Imprimir el arbol en anchura (por niveles) indicando el nivel respectivo." << endl;
 	cout << "4. Imprimir la subClasificacion de una rama en especifico. Se debe solicitar caracteristica y valor." << endl;
-	cout << "5. Imprimir toda la informacion central del nodo." << endl;
 	cout << "\nIngrese una opcion: " << endl;
 	cin >> opcion;
 
 	if (opcion == 1) {
-
+		imprimirInformacionPreorden(raiz);
 	}
 	if (opcion == 2) {
-
+		imprimeTodo();
 	}
 	if (opcion == 3) {
-
+		imprimeAnchura();
 	}
 	if (opcion == 4) {
-
-	}
-	if (opcion == 5) {
-
+		imprimenHijo();
 	}
 }
 
@@ -1314,6 +1398,6 @@ int main()
 {
 	datosQuemados();
 	menu();
-	eliminarPersona();
+
 	return 0;
 }
